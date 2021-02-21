@@ -19,12 +19,6 @@ if __name__ == '__main__':
     except Exception as e:
         sys.exit(logging.error('%s', 'Failed to call API'))
 
-    # overall_stats = {}
-    # for i in range(len(body)):
-    #     get_simple_json(body[i], overall_stats)
-
-
-
 
     directory = os.path.dirname(__file__)
 
@@ -37,10 +31,14 @@ if __name__ == '__main__':
     save_file_path = os.path.join(save_dir, 'save.json')
     prefecture_stats = get_simple_json(body)
 
-    # if os.path.isfile(save_file_path):
-    #     old_body = json_read(save_file_path)
-    #     old_day = old_body['date']
-
+    if os.path.isfile(save_file_path):
+        old_body = json_read(save_file_path)
+        old_day = old_body['date']
+        if prefecture_stats['date'] != old_day:
+            old_body[prefecture_stats['date']] = {
+                # "date": prefecture_stats['date'],
+                "stats": prefecture_stats['stats']
+            }
     # for loop 書かないと
     #     difference = body['positive'] - old_body['positive']
     # else:
