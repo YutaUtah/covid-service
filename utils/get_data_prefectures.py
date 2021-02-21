@@ -20,7 +20,7 @@ def get_simple_json(body):
         body: json object for each prefecture
         overall_stats: dictionary to store all covid19 information
     '''
-    temp_prefecture_stats = {}
+    temp_prefecture_stats = []
 
 
     for i in range(len(body)):
@@ -30,13 +30,13 @@ def get_simple_json(body):
         cases = body[i]['cases']
         deaths = body[i]['deaths']
 
-        temp_prefecture_stats[prefecture] = {
-            "total": {
+        temp_prefecture_stats.append({
+                "prefecture": prefecture,
                 "population": population,
                 "cases": cases,
                 "deaths": deaths
-            }
-        }
+
+        })
 
     overall_stats = {
         "date": int_date,
