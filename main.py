@@ -29,23 +29,23 @@ if __name__ == '__main__':
 
     daily_infections = os.path.join(save_dir, 'daily.json')
     save_file_path = os.path.join(save_dir, 'save.json')
+    myDict = {'covid_data': []}
     daily_stats = get_simple_json(body)
 
-    # if os.path.isfile(save_file_path):
-    #     old_body = json_read(save_file_path)
-    #     old_day = old_body['date']
-    #     if daily_stats['date'] != old_day:
-    #         old_body['date'] = {
-    #             # "date": prefecture_stats['date'],
-    #             "stats": prefecture_stats['stats']
-    #         }
+    if os.path.isfile(save_file_path):
+        old_body = json_read(save_file_path)
+        old_day = old_body['covid_data'][0]['date']
+        if daily_stats['date'] != old_day:
+            print(len(myDict))
+            myDict['covid_data'].append(daily_stats)
+            print(len(myDict))
     # for loop 書かないと
     #     difference = body['positive'] - old_body['positive']
-    # else:
-    #     old_day = None
-    #     difference = 0
+    else:
+        old_day = None
+        difference = 0
 
-    json_write(daily_stats, save_file_path)
+    json_write(myDict, save_file_path)
 
     # if day != old_day:
     #     if os.path.isfile(daily_infections):
