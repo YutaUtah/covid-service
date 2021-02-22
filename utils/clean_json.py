@@ -46,38 +46,7 @@ def get_json_by_prefecture(body):
     }
     return overall_stats
 
-def get_json_by_prefecture(body):
-    '''
-    simplify json format by extracting only needed information by prefecture
-    Args:
-        body: json object for each prefecture
-        overall_stats: dictionary to store all covid19 information
-    '''
-    temp_prefecture_stats = []
 
-
-    for i in range(len(body)):
-        int_date = body[i]['last_updated']['cases_date']
-        prefecture = body[i]['name_ja']
-        population = body[i]['population']
-        cases = body[i]['cases']
-        deaths = body[i]['deaths']
-
-        temp_prefecture_stats.append({
-                "prefecture": prefecture,
-                "population": population,
-                "cases": cases,
-                "deaths": deaths,
-                "cases_per_population": cases*100/population,
-                "deaths_per_population": deaths*100/population,
-
-        })
-
-    overall_stats = {
-        "date": int_date,
-        "stats": temp_prefecture_stats
-    }
-    return overall_stats
 
 def get_json_total_stats(body):
 
