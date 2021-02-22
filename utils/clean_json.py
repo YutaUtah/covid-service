@@ -53,7 +53,7 @@ def get_json_total_stats(body):
     temp_total_stats = []
 
     for i in range(len(body)):
-        int_date = body[i]['date']
+        date = body[i]['date']
         pcr_cases = body[i]['pcr']
         positive = body[i]['positive']
         severe = body[i]['severe']
@@ -61,7 +61,7 @@ def get_json_total_stats(body):
         deaths_rate = body[i]['death'] * 100 / (body[i]['positive'] + 1)
 
         temp_total_stats.append({
-            "int_date": int_date,
+            "date": date,
             "pcr_cases": pcr_cases,
             "positive": positive,
             "severe": severe,
@@ -83,3 +83,4 @@ def get_json_total_stats(body):
 # total_stats = get_json_total_stats(total_stats_request)
 # print(len(total_stats.keys()))
 # print(len(total_stats['stats']))
+# print(total_stats)
