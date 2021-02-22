@@ -5,6 +5,7 @@ import os
 from utils.clean_json import get_requests, get_json_by_prefecture, get_json_total_stats
 from utils.json_utils import json_write
 from DButils.mongo import update_mongodb, show_content, delete_all_stack_mongodb
+from analysis.total_stats_analysis import convert_total_stats_to_df
 from constants import Const
 
 formatter = '%(levelname)s : %(asctime)s : %(message)s'
@@ -15,6 +16,7 @@ if __name__ == '__main__':
     try:
         by_prefecture_request = get_requests(Const.BY_PREFECTURE_API)
         total_stats_request = get_requests(Const.TOTAL_STATS_API)
+        logging.info('API is called')
     except Exception as e:
         sys.exit(logging.error('%s', 'failed to call API'))
 
@@ -36,13 +38,14 @@ if __name__ == '__main__':
     json_write(daily_stats_by_prefecture, save_file_path_by_prefecture)
     json_write(total_stats, save_file_path_total_stats)
 
-    update_mongodb(daily_stats_by_prefecture)
-    update_mongodb(total_stats)
+    db_stacks_prefecture = update_mongodb(daily_stats_by_prefecture)
+    db_stacks_total_stats = update_mongodb(total_stats)
+    logging.info('database is updated')
+    total_stats_df = convert_total_stats_to_df(db_stacks_total_stats)
 
+    print(total_stats_df)
     # delete_all_stack_mongodb()
     # show_content(total_stats)
-
-
 
 
 
