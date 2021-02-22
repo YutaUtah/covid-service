@@ -2,19 +2,18 @@ import logging
 import sys
 import os
 
-from utils.get_data_prefectures import get_requests, get_simple_json
+from utils.clean_json import get_requests, get_json_by_prefecture, get_json_total_stats
 from utils.json_utils import json_write
-from DButils.mongo import update_mongodb, show_content
+from DButils.mongo import update_mongodb, show_content, delete_all_stack_mongodb
 
 formatter = '%(levelname)s : %(asctime)s : %(message)s'
 logging.basicConfig(level=logging.ERROR, format=formatter)
 
 
 if __name__ == '__main__':
-
     try:
-        body = get_requests('https://covid19-japan-web-api.now.sh/api/v1/prefectures')
-
+        by_prefecture_request = get_requests('https://covid19-japan-web-api.now.sh/api/v1/prefectures')
+        total_stats_request = get_requests('https://covid19-japan-web-api.now.sh/api/v1/total?history=true')
     except Exception as e:
         sys.exit(logging.error('%s', 'failed to call API'))
 
@@ -27,11 +26,23 @@ if __name__ == '__main__':
         logging.info('%s', 'creating folder at {}'.format(save_dir))
         os.makedirs(save_dir)
 
-    save_file_path = os.path.join(save_dir, 'latest.json')
-    daily_stats = get_simple_json(body)
+    save_file_path_by_prefecture = os.path.join(save_dir, 'latest_by_prefecture.json')
+    daily_stats_by_prefecture = get_json_by_prefecture(by_prefecture_request)
 
-    json_write(daily_stats, save_file_path)
-    update_mongodb(daily_stats)
-    show_content()
+    save_file_path_total_stats = os.path.join(save_dir, 'latest_total_stats.json')
+    total_stats = get_json_total_stats(total_stats_request)
+
+    json_write(daily_stats_by_prefecture, save_file_path_by_prefecture)
+    json_write(total_stats, save_file_path_total_stats)
+
+    update_mongodb(daily_stats_by_prefecture)
+    update_mongodb(total_stats)
+
+    # delete_all_stack_mongodb()
+    # show_content(total_stats)
+
+
+
+
 
 
