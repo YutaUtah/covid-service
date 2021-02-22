@@ -6,7 +6,6 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-
 client = MongoClient('mongodb://localhost:27017/')
 db = client['test_database']
 db_stacks = db.stacks
@@ -20,7 +19,7 @@ def delete_one_stack_mongodb(db_stacks):
     for stack in db_stacks.find():
         print(stack['_id'])
         print(stack['stats'][-1]['date'])
-    # db_stacks.delete_one(stack)
+
 
 
 def delete_all_stack_mongodb(db_stacks):
@@ -70,6 +69,7 @@ def update_mongodb(json):
 
         print('total stats database: ')
         show_content(db_stacks)
+    logging.info('database is updated')
     return db_stacks
 
 

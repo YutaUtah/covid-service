@@ -1,5 +1,9 @@
 import datetime
+import logging
 import pandas as pd
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 def convert_total_stats_to_df(db_stacks):
     data = db_stacks.find()[0]
@@ -14,6 +18,6 @@ def convert_total_stats_to_df(db_stacks):
         temp_data_list.append(data[i])
 
     df = df.append(temp_data_list, ignore_index=True)
-
+    logger.info('df is created')
     return df
 

@@ -1,5 +1,8 @@
 import requests
+import logging
 
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 def get_requests(link):
     '''
@@ -10,6 +13,7 @@ def get_requests(link):
         Dictionary: requested data
     '''
     response = requests.get(link)
+    logging.info('API is called: {}'.format(link))
     return response.json()
 
 
