@@ -4,6 +4,7 @@ import os
 
 from utils.get_data_prefectures import get_simple_json
 from utils.json_utils import json_read, json_write
+from DButils.mongo import update_mongodb, show_content
 
 formatter = '%(levelname)s : %(asctime)s : %(message)s'
 logging.basicConfig(level=logging.ERROR, format=formatter)
@@ -28,38 +29,24 @@ if __name__ == '__main__':
         os.makedirs(save_dir)
 
     daily_infections = os.path.join(save_dir, 'daily.json')
-    save_file_path = os.path.join(save_dir, 'save.json')
-    myDict = {'covid_data': []}
+    save_file_path = os.path.join(save_dir, 'latest.json')
+    myDict = {}
     daily_stats = get_simple_json(body)
 
     if os.path.isfile(save_file_path):
         old_body = json_read(save_file_path)
-        old_day = old_body['covid_data'][0]['date']
+        old_day = old_body['date']
         if daily_stats['date'] != old_day:
-            print(len(myDict))
-            myDict['covid_data'].append(daily_stats)
-            print(len(myDict))
+            pass
     # for loop 書かないと
     #     difference = body['positive'] - old_body['positive']
     else:
-        old_day = None
-        difference = 0
+        pass
+        # old_day = None
+        # difference = 0
 
-    json_write(myDict, save_file_path)
-
-    # if day != old_day:
-    #     if os.path.isfile(daily_infections):
-    #         daily = json_read(daily_infections)
-    #     else:
-    #         daily = []
-
-
-    #     day_obj = datetime.datetime.strptime(str(day), r'%Y%m%d')
-    #     daily.append({
-    #         'date': day,
-    #         'positive': difference
-    #     })
-    #
-    #
+    json_write(daily_stats, save_file_path)
+    update_mongodb(daily_stats)
+    show_content()
 
 
