@@ -40,6 +40,5 @@ def show_content():
     for stack in db_stacks.find():
         print(stack)
 
-# show_content()
 # delete_all_stack_mongodb()
 # show_content()
