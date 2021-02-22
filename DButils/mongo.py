@@ -3,7 +3,7 @@ import os
 import logging
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.ERROR)
+logger.setLevel(logging.INFO)
 
 
 
@@ -46,6 +46,7 @@ def update_mongodb(json):
             logger.error('no file is found')
         else:
             if db_stacks.find_one({'date': json['date']}):
+                logger.info('latest prefecture data already exists')
                 pass
             else:
                 db_stacks.insert_one(json).inserted_id
@@ -58,6 +59,7 @@ def update_mongodb(json):
             logger.error('no file is found')
         else:
             if db_stacks.find_one({}, {'date': json['stats'][-1]['int_date']}):
+                logger.info('latest total stats data already exists')
                 pass
             else:
                 db_stacks.insert_one(json).inserted_id
