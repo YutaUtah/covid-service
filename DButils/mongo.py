@@ -16,8 +16,11 @@ def update_one_stack_mongodb(stack):
     db_stacks.insert_one(stack)
 
 
-def delete_one_stack_mongodb(stack):
-    db_stacks.delete_one(stack)
+def delete_one_stack_mongodb(db_stacks):
+    for stack in db_stacks.find():
+        print(stack['_id'])
+        print(stack['stats'][-1]['date'])
+    # db_stacks.delete_one(stack)
 
 
 def delete_all_stack_mongodb(db_stacks):
@@ -58,13 +61,16 @@ def update_mongodb(json):
         if not os.path.isfile(save_file_path):
             logger.error('no file is found')
         else:
-            if db_stacks.find_one({}, {'date': json['stats'][-1]['int_date']}):
+            if db_stacks.find_one({}, {'date': json['stats'][-1]['date']}) is None:
                 logger.info('latest total stats data already exists')
                 pass
             else:
+                db_stacks.delete_many({})
                 db_stacks.insert_one(json).inserted_id
+
         print('total stats database: ')
         show_content(db_stacks)
+    return db_stacks
 
 
 
