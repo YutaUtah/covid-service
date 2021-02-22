@@ -11,7 +11,7 @@ def json_write(body, save_file_path):
         json.dump(body, contents, indent=4, ensure_ascii=False)
 
 
-def json_read(save_file_path: str):
+def json_read(save_file_path):
     '''
     read json file
     Args:
